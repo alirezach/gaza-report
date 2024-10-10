@@ -1,0 +1,31 @@
+---
+title: "Gaza Report"
+format:
+  dashboard:
+    logo: "img/freegaza.png"
+    orientation: columns
+---
+
+## column {width="25%"}
+text 1, colum 1
+```{r}
+#| echo: false
+#| include: false
+library(tidyverse)
+library(jsonlite)
+```
+
+```{r}
+head(starwars)
+```
+
+## column {width="75%"}
+
+### Row {height="10%"}
+text 2 in Row 1
+
+### Row {height="70%"}
+text 2 in Row 2
+
+### Row {height="20%"}
+text 2 in Row 3
