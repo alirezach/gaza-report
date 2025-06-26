@@ -6,26 +6,76 @@ format:
     orientation: columns
 ---
 
-## column {width="25%"}
-text 1, colum 1
+## Column {width="30%"}
+
+### **Key Stats**
 ```{r}
 #| echo: false
-#| include: false
+#| include: true
 library(tidyverse)
 library(jsonlite)
+library(bslib) # For value_box
+
+# Ensure starwars data is loaded
+if (!exists("starwars") || !is.data.frame(starwars)) {
+  data(starwars, package = "dplyr") # Explicitly load if not found
+}
+
+# Calculate some stats
+total_characters <- nrow(starwars)
+average_height <- mean(starwars$height, na.rm = TRUE)
 ```
 
 ```{r}
-head(starwars)
+#| echo: false
+value_box(
+  title = "Total Characters",
+  value = total_characters,
+  showcase = bsicons::bs_icon("people-fill"),
+  theme = "primary"
+)
 ```
 
-## column {width="75%"}
+<br> <!-- Adding some space -->
 
-### Row {height="10%"}
-text 2 in Row 1
+```{r}
+#| echo: false
+value_box(
+  title = "Avg. Height (cm)",
+  value = round(average_height, 0),
+  showcase = bsicons::bs_icon("rulers"),
+  theme = "info"
+)
+```
 
-### Row {height="70%"}
-text 2 in Row 2
+## Column {width="70%"}
 
-### Row {height="20%"}
-text 2 in Row 3
+### **Star Wars Characters Data**
+```{r}
+#| echo: false
+#| title: "Character Sample Data"
+if (exists("starwars") && is.data.frame(starwars)) {
+  DT::datatable(
+    head(starwars |> select(name, height, mass, species, homeworld)),
+    options = list(pageLength = 5, autoWidth = TRUE, scrollX = TRUE),
+    rownames = FALSE,
+    caption = "A sample of Star Wars characters."
+  )
+} else {
+  print("Starwars dataset not available.")
+}
+```
+
+### **Distribution of Character Heights**
+```{r}
+#| echo: false
+#| title: "Histogram of Heights"
+if (exists("starwars") && is.data.frame(starwars) && "height" %in% names(starwars)) {
+  ggplot(starwars, aes(x = height)) +
+    geom_histogram(binwidth = 10, fill = "#56B4E9", color = "white", na.rm = TRUE) +
+    labs(title = "Distribution of Character Heights", x = "Height (cm)", y = "Number of Characters") +
+    theme_minimal()
+} else {
+  print("Height data not available for plotting.")
+}
+```
